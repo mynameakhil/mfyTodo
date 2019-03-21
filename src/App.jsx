@@ -27,12 +27,14 @@ class App extends Component {
 
   addTodo(e) {
     if (e.key === "Enter") {
-      const { value } = e.target;
+      const values = e.target.value;
+
       this.setState({
         noteText: ""
       });
       const { notes } = this.state;
-      this.setState({ notes: [...notes, value] });
+      this.setState({ notes: [...notes, values] });
+
       axios
         .post(
           `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`,
@@ -133,7 +135,7 @@ class App extends Component {
             type="text"
             value={this.state.noteText}
             onChange={e => this.setState({ noteText: e.target.value })}
-            onKeyPress={this.addTodo}
+            onKeyPress={e => this.addTodo(e)}
             placeholder="Enter the note"
           />
           {lst}
