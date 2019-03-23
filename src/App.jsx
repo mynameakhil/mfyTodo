@@ -1,147 +1,132 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      noteText: "",
-      notes: [],
-      updteBtn: true,
-      idt: ""
-    };
-  }
-
-  componentDidMount() {
+function App() {
+  const [noteText, setNoteText] = useState("");
+  const [notes, setNote] = useState([]);
+  const [isUpdteBtn, setUpdateBtn] = useState(true);
+  const [currentId, setIdt] = useState("");
+  useEffect(() => {
+    console.log("calling api");
     axios
       .get(
         `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`
       )
       .then(res => {
-        const note = res.data;
-        const value = [...note.result.user];
-        this.setState({ notes: value });
-      });
-  }
+        const getNotes = res.data;
 
-  addTodo(e) {
+        const currentNotes = [...getNotes.result];
+
+        setNote(currentNotes);
+      });
+  }, []);
+
+  const addTodo = e => {
     if (e.key === "Enter") {
-      const values = e.target.value;
+      const getNotes = e.target.value;
 
-      this.setState({
-        noteText: ""
-      });
-      const { notes } = this.state;
-      this.setState({ notes: [...notes, values] });
+      setNoteText("");
+
+      const currentNotes = [...notes, getNotes];
+
+      setNote(currentNotes);
 
       axios
         .post(
           `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`,
-          {
-            user: notes
-          }
+          currentNotes
         )
         .then(res => {
           console.log(res);
+          console.log(res.data);
         });
     }
-  }
+  };
 
-  editTodo(val, index) {
-    this.setState({
-      noteText: val,
-      updteBtn: false,
-      idt: index
-    });
-    this.state.notes[index] = "";
-    this.setState({
-      notes: [...this.state.notes]
-    });
-  }
+  const editTodo = (val, index) => {
+    setNoteText(val);
+    setUpdateBtn(false);
+    setIdt(index);
 
-  updateList() {
-    const ide = this.state.idt;
-    this.state.notes[ide] = this.state.noteText;
-    this.setState({
-      notes: [...this.state.notes],
-      noteText: "",
-      updteBtn: true
-    });
-    const user = [...this.state.notes];
+    setNote((notes[index] = ""));
+    setNote([...notes]); // DOUT
+  };
+
+  const updateList = () => {
+    const currentIndex = currentId;
+    notes[currentIndex] = noteText;
+    setNote([...notes]);
+    setNoteText("");
+    setUpdateBtn(true);
+
+    const currentNotes = notes;
     axios
       .post(
         `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`,
-        {
-          user
-        }
+        currentNotes
       )
       .then(res => {
         console.log(res);
       });
-  }
+  };
 
-  deleteHandler(index) {
-    const dlt = this.state.notes.splice(index, 1);
-    this.setState({ notes: this.state.notes.filter(note => note !== dlt) });
-    const user = [...this.state.notes];
+  const deleteHandler = index => {
+    const dltNote = notes.splice(index, 1);
+    setNote(notes.filter(note => note !== dltNote));
+    const currentNotes = notes;
+
     axios
       .post(
         `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`,
-        { user }
+        currentNotes
       )
       .then(res => {
         console.log(res);
       });
-  }
+  };
 
-  render() {
-    let lst;
-    if (this.state.updteBtn) {
-      lst = (
-        <ul>
-          <div>
-            {this.state.notes.map((val, index) => (
-              <li className="lst">
-                {" "}
-                {val}
-                <button
-                  className="btn2"
-                  onClick={() => this.deleteHandler(index)}
-                >
-                  delete
-                </button>
-                <button onClick={() => this.editTodo(val, index)}>edit</button>
-              </li>
-            ))}
-          </div>
-        </ul>
-      );
-    } else {
-      lst = (
+  let list;
+  if (isUpdteBtn) {
+    list = (
+      <ul>
         <div>
-          <button className="btn2" onClick={() => this.updateList()}>
-            update
-          </button>
+          {notes.map((val, index) => (
+            <li className="lst">
+              {val}
+              <button className="btn2" onClick={() => deleteHandler(index)}>
+                delete
+              </button>
+              <button onClick={() => editTodo(val, index)}>edit</button>
+            </li>
+          ))}
         </div>
-      );
-    }
-
-    return (
+      </ul>
+    );
+  } else {
+    list = (
       <div>
-        <div className="App">
-          <h1>TO DO</h1>
-          <input
-            type="text"
-            value={this.state.noteText}
-            onChange={e => this.setState({ noteText: e.target.value })}
-            onKeyPress={e => this.addTodo(e)}
-            placeholder="Enter the note"
-          />
-          {lst}
-        </div>
+        <button className="btn2" onClick={() => updateList()}>
+          update
+        </button>
       </div>
     );
   }
+
+  return (
+    <div>
+      <div className="App">
+        <h1>TO DO</h1>
+        <input
+          type="text"
+          value={noteText}
+          onChange={e => setNoteText(e.target.value)}
+          onKeyPress={e => addTodo(e)}
+          placeholder="Enter the note"
+        />
+        {list}
+      </div>
+    </div>
+  );
 }
 export default App;
