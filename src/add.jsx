@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 const AddTodo = props => {
   const [noteText, setNoteText] = useState("");
@@ -27,13 +27,13 @@ const AddTodo = props => {
     </div>
   );
 };
-AddTodo.propTypes = {
-  history: PropTypes.shape({
-    url: PropTypes.string,
-    push: PropTypes.func
-  })
-};
-AddTodo.defaultProps = {
-  history: {}
-};
+// AddTodo.propTypes = {
+//   history: PropTypes.shape({
+//     url: PropTypes.string,
+//     push:PropTypes.func
+//   })
+// };
+// AddTodo.defaultProps = {
+//   history: {}
+// };
 export default AddTodo;

@@ -5,5 +5,13 @@
     "extends": [
         "airbnb",
         "prettier"
-    ]
-}                                                                                                                                                                                                     
+    ],
+
+
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "react/prop-types": 0
+    }
+}

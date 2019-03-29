@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./notes.css";
+// import { Link } from "react-router-dom";
 
 function ListTodos() {
   // const [noteText, setNoteText] = useState("");
@@ -117,34 +118,37 @@ function ListTodos() {
     // });
   };
 
-  let list;
-  const isUpdteBtn = true;
-  if (isUpdteBtn) {
-    list = (
-      <ul>
-        <div>
-          {notes.map((val, index) => (
-            <li className="lst">
-              {val}
-              <button className="btn2" onClick={() => deleteHandler(index)}>
-                delete
-              </button>
-              {/* <button onClick={<Route path="/edit" component={EditTodo} />}>
-                edit
-              </button> */}
-            </li>
-          ))}
-        </div>
-      </ul>
-    );
-  } else {
-    list = (
-      <div>
-        {/* Clicked={this.updateList} */}
-        <button className="btn2">update</button>
-      </div>
-    );
-  }
+  // let list;
+  // const isUpdteBtn = true;
+  // if (isUpdteBtn) {
+  //   list = (
+  //     <ul>
+  //       <div>
+  //         {notes.map((val, index) => (
+  //           <li className="lst">
+  //             {val}
+  //             <button className="btn2" onClick={() => deleteHandler(index)}>
+  //               delete
+  //             </button>
+  //             <Link to="/edit/:index">
+  //               <button> Edit</button>
+  //             </Link>
+  //             {/* <button onClick={<Route path="/edit" component={EditTodo} />}>
+  //               edit
+  //             </button> */}
+  //           </li>
+  //         ))}
+  //       </div>
+  //     </ul>
+  //   );
+  // } else {
+  //   list = (
+  //     <div>
+  //       {/* Clicked={this.updateList} */}
+  //       <button className="btn2">update</button>
+  //     </div>
+  //   );
+  // }
   // if (isEdit) {
   //   <Router>
   //     <div>
@@ -170,7 +174,26 @@ function ListTodos() {
           onKeyPress={e => addTodo(e)}
           placeholder="Enter the note"
         /> */}
-        {list}
+        {
+          <ul>
+            <div>
+              {notes.map((val, index) => (
+                <li className="lst">
+                  {val}
+                  <button className="btn2" onClick={() => deleteHandler(index)}>
+                    delete
+                  </button>
+                  {/* <Link to="/edit/:index">
+                    <button> Edit</button>
+                  </Link> */}
+                  {/* <button onClick={<Route path="/edit" component={EditTodo} />}>
+                edit
+              </button> */}
+                </li>
+              ))}
+            </div>
+          </ul>
+        }
       </div>
     </div>
   );
