@@ -14,11 +14,9 @@ const App = () => (
       <div>
         <Navigation />
         <Switch>
-          <Route path="/edit" component={EditTodo} />
+          <Route path="/edit/:id" component={EditTodo} />
           <Route path="/add" component={AddTodo} />
           <Route path="/" component={ListTodos} />
-          {/* <Route path="/edit" component={Add} /> */}
-          {/* <Route path="/notes" component={Notes} /> */}
           <Route component={Notfound} />
         </Switch>
       </div>
