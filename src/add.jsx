@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Button, Input } from "antd";
+import "antd/dist/antd.css";
 
 const AddTodo = props => {
   const [noteText, setNoteText] = useState("");
@@ -18,17 +20,29 @@ const AddTodo = props => {
 
     props.history.push("/");
   };
-
+  const { TextArea } = Input;
   return (
     <div>
       <h1>TO DO</h1>
-      <input
+      {/* <input
         type="text"
         value={noteText}
         onChange={e => setNoteText(e.target.value)}
         placeholder="Enter the note"
+      /> */}
+      <TextArea
+        placeholder="enter the note"
+        autosize
+        value={noteText}
+        onChange={e => setNoteText(e.target.value)}
       />
-      <button onClick={addNotes}>Add</button>
+      <div style={{ margin: "24px 0" }} />
+      {/* <TextArea placeholder="" autosize={{ minRows: 2, maxRows: 6 }} /> */}
+
+      {/* <button onClick={addNotes}>Add</button> */}
+      <Button type="primary" onClick={addNotes}>
+        Add
+      </Button>
     </div>
   );
 };

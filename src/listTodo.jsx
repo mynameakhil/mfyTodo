@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import { Button, List } from "antd";
+import "antd/dist/antd.css";
+
 import "./notes.css";
 
 function ListTodos() {
@@ -38,17 +41,30 @@ function ListTodos() {
           <ul>
             <div>
               {notes.map((val, index) => (
-                <li className="lst" key={val}>
-                  {val}
-                  <button className="btn2" onClick={() => deleteHandler(index)}>
+                // <li className="lst" key={val}>
+                //   {val}
+
+                <List
+                  size="large"
+                  header={<div>notes</div>}
+                  footer={<div>end</div>}
+                >
+                  {/* bordered // dataSource={data} */}
+                  {/* // renderItem={item => <List.Item>{val}</List.Item>} */}{" "}
+                  {/* <button className="btn2" onClick={() => deleteHandler(index)}>
                     delete
-                  </button>
+                  </button> */}
+                  {val}
+                  <Button type="primary" onClick={() => deleteHandler(index)}>
+                    Delete
+                  </Button>
                   <NavLink
                     to={{ pathname: `/edit/${index}`, state: { notes } }}
                   >
-                    <button> Edit</button>
+                    <Button type="primary">Edit</Button>
                   </NavLink>
-                </li>
+                </List>
+                // </li>
               ))}
             </div>
           </ul>
