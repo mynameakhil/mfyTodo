@@ -20,13 +20,7 @@ const EditTodo = props => {
   };
   return (
     <div>
-      <h1>TO DO</h1>
-      {/* <input
-        type="text"
-        value={noteText}
-        onChange={e => setNoteText(e.target.value)}
-        placeholder="Enter the note"
-      /> */}
+      <h1>Please Edit Your Notes</h1>
       <TextArea
         placeholder="enter the note"
         autosize
@@ -34,8 +28,6 @@ const EditTodo = props => {
         onChange={e => setNoteText(e.target.value)}
       />
       <div style={{ margin: "24px 0" }} />
-
-      {/* <button onClick={editUpdate}>update</button> */}
       <Button type="primary" onClick={editUpdate}>
         Update
       </Button>

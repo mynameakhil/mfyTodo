@@ -33,42 +33,30 @@ function ListTodos() {
     );
   };
   const newNotes = notes.map((val, index) => ({
-    number: index,
-    note: val
+    Number: index + 1,
+    Note: val
   }));
-  // const columns = [
-  //   {
-  //     title: "number",
-  //     dataIndex: "number",
-  //     key: "number"
-  //   },
-  //   {
-  //     title: "note",
-  //     dataIndex: "note",
-  //     key: "note"
-  //   }
-  // ];
 
   return (
     <Table dataSource={newNotes} rowKey="number">
       <Table.Column
-        title="number"
-        dataIndex="number"
-        key="number"
+        title="Number"
+        dataIndex="Number"
+        key="Number"
         width={50}
-        render={number => <b>{number}</b>}
+        render={Number => <b>{Number}</b>}
       />
 
       <Table.Column
-        title="note"
-        dataIndex="note"
-        key="note"
-        render={note => <b>{note}</b>}
+        title="Note"
+        dataIndex="Note"
+        key="Note"
+        render={Note => <b>{Note}</b>}
       />
       <Table.Column
-        title="edit"
-        dataIndex="edit"
-        key="edit"
+        title="Edit"
+        dataIndex="Edit"
+        key="Edit"
         width={50}
         render={(_, B, index) => (
           <NavLink to={{ pathname: `/edit/${index}`, state: { notes } }}>
@@ -78,17 +66,14 @@ function ListTodos() {
       />
       <Table.Column
         width={50}
-        title="delete"
-        dataIndex="delete"
-        key="delete"
-        render={(_, B, index) => {
-          console.log(index);
-          return (
-            <Button type="primary" onClick={() => deleteHandler(index)}>
-              Delete
-            </Button>
-          );
-        }}
+        title="Delete"
+        dataIndex="Delete"
+        key="Delete"
+        render={(_, B, index) => (
+          <Button type="primary" onClick={() => deleteHandler(index)}>
+            Delete
+          </Button>
+        )}
       />
     </Table>
   );
