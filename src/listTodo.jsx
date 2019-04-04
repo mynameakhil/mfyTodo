@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
-import { Button, List } from "antd";
+import { Button, Table } from "antd";
 import "antd/dist/antd.css";
-
 import "./notes.css";
 
 function ListTodos() {
@@ -33,44 +32,66 @@ function ListTodos() {
       { currentNotes }
     );
   };
+  const newNotes = notes.map((val, index) => ({
+    number: index,
+    note: val
+  }));
+  // const columns = [
+  //   {
+  //     title: "number",
+  //     dataIndex: "number",
+  //     key: "number"
+  //   },
+  //   {
+  //     title: "note",
+  //     dataIndex: "note",
+  //     key: "note"
+  //   }
+  // ];
 
   return (
-    <div>
-      <div className="App">
-        {
-          <ul>
-            <div>
-              {notes.map((val, index) => (
-                // <li className="lst" key={val}>
-                //   {val}
+    <Table dataSource={newNotes} rowKey="number">
+      <Table.Column
+        title="number"
+        dataIndex="number"
+        key="number"
+        width={50}
+        render={number => <b>{number}</b>}
+      />
 
-                <List
-                  size="large"
-                  header={<div>notes</div>}
-                  footer={<div>end</div>}
-                >
-                  {/* bordered // dataSource={data} */}
-                  {/* // renderItem={item => <List.Item>{val}</List.Item>} */}{" "}
-                  {/* <button className="btn2" onClick={() => deleteHandler(index)}>
-                    delete
-                  </button> */}
-                  {val}
-                  <Button type="primary" onClick={() => deleteHandler(index)}>
-                    Delete
-                  </Button>
-                  <NavLink
-                    to={{ pathname: `/edit/${index}`, state: { notes } }}
-                  >
-                    <Button type="primary">Edit</Button>
-                  </NavLink>
-                </List>
-                // </li>
-              ))}
-            </div>
-          </ul>
-        }
-      </div>
-    </div>
+      <Table.Column
+        title="note"
+        dataIndex="note"
+        key="note"
+        render={note => <b>{note}</b>}
+      />
+      <Table.Column
+        title="edit"
+        dataIndex="edit"
+        key="edit"
+        width={50}
+        render={(_, B, index) => (
+          <NavLink to={{ pathname: `/edit/${index}`, state: { notes } }}>
+            <Button type="primary">Edit</Button>
+          </NavLink>
+        )}
+      />
+      <Table.Column
+        width={50}
+        title="delete"
+        dataIndex="delete"
+        key="delete"
+        render={(_, B, index) => {
+          console.log(index);
+          return (
+            <Button type="primary" onClick={() => deleteHandler(index)}>
+              Delete
+            </Button>
+          );
+        }}
+      />
+    </Table>
   );
+  // <pre>{JSON.stringify(notes, null, 4)}</pre>;
 }
 export default ListTodos;
