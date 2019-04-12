@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Button, Input } from "antd";
+import { Button, Input, Form } from "antd";
+import * as yup from "yup";
 import "antd/dist/antd.css";
 import { Formik } from "formik";
 
 const { TextArea } = Input;
 const EditTodo = props => {
+  const validationSchema = yup.object().shape({
+    note: yup.string().required("note is required")
+  });
   const { id } = props.match.params;
   const { notes } = props.location.state;
 
-  const [noteText] = notes[id];
+  const [noteText] = useState(notes[id]);
   const editUpdate = async val => {
     notes[id] = val;
 
@@ -23,17 +27,8 @@ const EditTodo = props => {
   return (
     <Formik
       initialValues={{ note: noteText }}
-      validate={values => {
-        const errors = {};
-        if (!values.note) {
-          errors.note = "Please Enter note";
-        }
-        return errors;
-      }}
       onSubmit={values => {
         setTimeout(() => {
-          // alert(JSON.stringify(values, null, 2));
-          console.log(values.note);
           editUpdate(values.note);
         }, 400);
       }}
@@ -46,29 +41,29 @@ const EditTodo = props => {
         handleSubmit
       }) => (
         <form onSubmit={handleSubmit}>
-          <TextArea
-            name="note"
-            type="text"
-            placeholder="enter the note"
-            autosize
-            // value={noteText}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.note}
-            // onChange={e => setNoteText(e.target.value)}
-          />
-
-          {errors.note && touched.note && errors.note}
-
+          <Form.Item
+            help={touched.note && errors.note}
+            validateStatus={touched.note && errors.note && "error"}
+          >
+            <TextArea
+              name="note"
+              type="text"
+              placeholder="enter the note"
+              autosize
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.note}
+            />
+          </Form.Item>
           <div style={{ margin: "24px 0" }} />
           <Button type="primary" onClick={handleSubmit}>
             Update
           </Button>
         </form>
       )}
+      validationSchema={validationSchema}
     />
   );
 };
 
 export default EditTodo;
-// // onSubmit={handleSubmit}
