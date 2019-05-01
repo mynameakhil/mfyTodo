@@ -1,38 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { Button, Table } from "antd";
+import { connect } from "react-redux";
 import "antd/dist/antd.css";
 import "./notes.css";
 
-function ListTodos() {
-  const [notes, setNote] = useState([]);
-
+function ListTodos(props) {
   useEffect(() => {
     axios
       .get(
         `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`
       )
       .then(res => {
-        const getNotes = res.data;
-
-        const todoNotes = [...getNotes.result.currentNotes];
-
-        setNote(todoNotes);
+        const notes = res.data.result.noteItem;
+        props.fetch(notes);
       });
   }, []);
 
   const deleteHandler = index => {
-    const dltNote = notes.splice(index, 1);
-    setNote(notes.filter(note => note !== dltNote));
-    const currentNotes = notes;
+    const dltNote = props.notes.splice(index, 1);
+    props.dlte(props.notes.filter(note => note !== dltNote));
+    const noteItem = props.notes;
 
     axios.post(
       `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`,
-      { currentNotes }
+      { noteItem }
     );
   };
-  const newNotes = notes.map((val, index) => ({
+
+  const newNotes = props.notes.map((val, index) => ({
     Number: index + 1,
     Note: val
   }));
@@ -59,7 +56,7 @@ function ListTodos() {
         key="Edit"
         width={50}
         render={(_, B, index) => (
-          <NavLink to={{ pathname: `/edit/${index}`, state: { notes } }}>
+          <NavLink to={{ pathname: `/edit/${index}` }}>
             <Button type="primary">Edit</Button>
           </NavLink>
         )}
@@ -69,14 +66,32 @@ function ListTodos() {
         title="Delete"
         dataIndex="Delete"
         key="Delete"
-        render={(_, B, index) => (
-          <Button type="primary" onClick={() => deleteHandler(index)}>
+        render={(_, A, index) => (
+          <Button
+            type="primary"
+            onClick={() => {
+              deleteHandler(index);
+            }}
+          >
             Delete
           </Button>
         )}
       />
     </Table>
   );
-  // <pre>{JSON.stringify(notes, null, 4)}</pre>;
+
+  // return <pre>{JSON.stringify(props.notes)}</pre>;
 }
-export default ListTodos;
+const mapDispatchToProps = dispatch => ({
+  dlte: note => dispatch({ type: "DELETE", value: note }),
+  fetch: notes => dispatch({ type: "FETCH", value: notes })
+});
+
+const mapStateToProps = state => ({
+  notes: state.notes
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ListTodos);

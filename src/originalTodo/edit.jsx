@@ -1,39 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Formik } from "formik";
-import * as yup from "yup";
 import { Button, Input, Form } from "antd";
+import * as yup from "yup";
 import "antd/dist/antd.css";
+import { Formik } from "formik";
+import { connect } from "react-redux";
 
-const AddTodo = props => {
+const { TextArea } = Input;
+const EditTodo = props => {
   const validationSchema = yup.object().shape({
     note: yup.string().required("note is required")
   });
+  const { id } = props.match.params;
 
-  const addNotes = async val => {
-    const url = `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`;
-    const { data } = await axios.get(url);
-    if (data.result === null) {
-      await axios.post(url, {
-        currentNotes: [val]
-      });
-    } else {
-      await axios.post(url, {
-        currentNotes: [...data.result.currentNotes, val]
-      });
-    }
+  const [noteText] = useState(props.notes[id]);
+  const editUpdate = async val => {
+    const notes = [...props.notes];
 
+    notes[id] = val;
+
+    await axios.post(process.env.REACT_APP_API_URL, { noteItem: notes });
     props.history.push("/");
   };
 
-  const { TextArea } = Input;
-
   return (
     <Formik
-      initialValues={{ note: "" }}
+      initialValues={{ note: noteText }}
       onSubmit={values => {
         setTimeout(() => {
-          addNotes(values.note);
+          editUpdate(values.note);
         }, 400);
       }}
       render={({
@@ -44,7 +39,7 @@ const AddTodo = props => {
         handleBlur,
         handleSubmit
       }) => (
-        <>
+        <form onSubmit={handleSubmit}>
           <Form.Item
             help={touched.note && errors.note}
             validateStatus={touched.note && errors.note && "error"}
@@ -61,12 +56,21 @@ const AddTodo = props => {
           </Form.Item>
           <div style={{ margin: "24px 0" }} />
           <Button type="primary" onClick={handleSubmit}>
-            ADD
+            Update
           </Button>
-        </>
+        </form>
       )}
       validationSchema={validationSchema}
     />
   );
 };
-export default AddTodo;
+const mapDispatchToProps = dispatch => ({
+  dlte: note => dispatch({ type: "DELETE", value: note })
+});
+const mapStateToProps = state => ({
+  notes: state.notes
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EditTodo);

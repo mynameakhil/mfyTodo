@@ -19,7 +19,7 @@ const Basic = () => (
       }}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
-          console.log(values.email);
+          // console.log(values.email);
           alert(JSON.stringify(values, null, 2));
           setSubmitting(false);
         }, 400);
