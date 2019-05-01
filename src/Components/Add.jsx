@@ -11,15 +11,13 @@ const AddTodo = props => {
     note: yup.string().required("note is required")
   });
 
-  const addNotes = async val => {
-    props.add(val);
-    const noteItem = props.notes;
+  const addNotes = async item => {
+    props.add(item);
+    const noteItems = props.notes;
 
-    noteItem.push(val);
-    console.log(noteItem);
-    const url = `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`;
+    noteItems.push(item);
 
-    await axios.post(url, { noteItem });
+    await axios.post(process.env.REACT_APP_API_URL, { noteItems });
 
     props.history.push("/");
   };
@@ -64,7 +62,7 @@ const AddTodo = props => {
   );
 };
 const mapDispatchToProps = dispatch => ({
-  add: note => dispatch({ type: "ADD", value: note })
+  add: item => dispatch({ type: "ADD", value: item })
 });
 const mapStateToProps = state => ({
   notes: state.notes

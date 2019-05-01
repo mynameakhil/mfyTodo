@@ -14,12 +14,12 @@ const EditTodo = props => {
   const { id } = props.match.params;
 
   const [noteText] = useState(props.notes[id]);
-  const editUpdate = async val => {
+  const editUpdate = async item => {
     const notes = [...props.notes];
 
-    notes[id] = val;
+    notes[id] = item;
 
-    await axios.post(process.env.REACT_APP_API_URL, { noteItem: notes });
+    await axios.post(process.env.REACT_APP_API_URL, { noteItems: notes });
     props.history.push("/");
   };
 
@@ -27,9 +27,7 @@ const EditTodo = props => {
     <Formik
       initialValues={{ note: noteText }}
       onSubmit={values => {
-        setTimeout(() => {
-          editUpdate(values.note);
-        }, 400);
+        editUpdate(values.note);
       }}
       render={({
         values,

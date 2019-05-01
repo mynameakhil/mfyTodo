@@ -1,5 +1,5 @@
 const intialState = {
-  notes: ["hwwww", "whhhh"]
+  notes: ["gvgh"]
 };
 
 const reducer = (state = intialState, action) => {

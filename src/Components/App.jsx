@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import "./index.css";
-import ListTodos from "./listTodo";
-import Notfound from "./notfound";
-import Navigation from "./navigation";
-import EditTodo from "./edit";
-import AddTodo from "./add";
+import "./Index.css";
+import ListTodos from "./ListTodo";
+import Notfound from "./NotFound";
+import Navigation from "./Navigation";
+import EditTodo from "./Edit";
+import AddTodo from "./Add";
 
 const App = () => {
   const textAlign = {

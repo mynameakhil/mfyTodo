@@ -4,34 +4,29 @@ import { NavLink } from "react-router-dom";
 import { Button, Table } from "antd";
 import { connect } from "react-redux";
 import "antd/dist/antd.css";
-import "./notes.css";
+import "./Notes.css";
 
 function ListTodos(props) {
   useEffect(() => {
-    axios
-      .get(
-        `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`
-      )
-      .then(res => {
-        const notes = res.data.result.noteItem;
-        props.fetch(notes);
-      });
+    axios.get(process.env.REACT_APP_API_URL).then(res => {
+      const notes = res.data.result.noteItems;
+      props.fetch(notes);
+    });
+    const noteItems = [...props.notes];
+    axios.post(process.env.REACT_APP_API_URL, { noteItems });
   }, []);
 
   const deleteHandler = index => {
     const dltNote = props.notes.splice(index, 1);
     props.dlte(props.notes.filter(note => note !== dltNote));
-    const noteItem = props.notes;
+    const noteItems = props.notes;
 
-    axios.post(
-      `https://www.jsonstore.io/fa37af0fceeebbee4116592742e30b7d29917daa0005049565b3d6e1ff153037`,
-      { noteItem }
-    );
+    axios.post(process.env.REACT_APP_API_URL, { noteItems });
   };
 
-  const newNotes = props.notes.map((val, index) => ({
+  const newNotes = props.notes.map((item, index) => ({
     Number: index + 1,
-    Note: val
+    Note: item
   }));
 
   return (
