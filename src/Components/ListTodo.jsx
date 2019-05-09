@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { Button, Table } from "antd";
 import { connect } from "react-redux";
@@ -8,29 +7,25 @@ import "./Notes.css";
 
 function ListTodos(props) {
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL).then(res => {
-      const notes = res.data.result.noteItems;
-      props.fetch(notes);
-    });
-    const noteItems = [...props.notes];
-    axios.post(process.env.REACT_APP_API_URL, { noteItems });
+    props.fetch();
   }, []);
-
   const deleteHandler = index => {
     const dltNote = props.notes.splice(index, 1);
-    props.dlte(props.notes.filter(note => note !== dltNote));
-    const noteItems = props.notes;
-
-    axios.post(process.env.REACT_APP_API_URL, { noteItems });
+    const noteItems = props.notes.filter(note => note !== dltNote);
+    props.delete(noteItems);
   };
 
+  if (!props.notes) {
+    return <pre>{JSON.stringify(props.notes)}</pre>;
+  }
   const newNotes = props.notes.map((item, index) => ({
     Number: index + 1,
     Note: item
   }));
 
+  //  return <pre>{JSON.stringify(props.notes)}</pre>;
   return (
-    <Table dataSource={newNotes} rowKey="number">
+    <Table dataSource={newNotes} rowKey="Number">
       <Table.Column
         title="Number"
         dataIndex="Number"
@@ -60,7 +55,6 @@ function ListTodos(props) {
         width={50}
         title="Delete"
         dataIndex="Delete"
-        key="Delete"
         render={(_, A, index) => (
           <Button
             type="primary"
@@ -74,16 +68,16 @@ function ListTodos(props) {
       />
     </Table>
   );
-
-  // return <pre>{JSON.stringify(props.notes)}</pre>;
 }
 const mapDispatchToProps = dispatch => ({
-  dlte: note => dispatch({ type: "DELETE", value: note }),
-  fetch: notes => dispatch({ type: "FETCH", value: notes })
+  fetch: () => dispatch({ type: "FETCH_NOTES" }),
+  delete: noteItems => dispatch({ type: "DELETE_NOTES", data: noteItems })
 });
 
 const mapStateToProps = state => ({
-  notes: state.notes
+  notes: state.data,
+  loading: state.loading,
+  error: state.error
 });
 
 export default connect(

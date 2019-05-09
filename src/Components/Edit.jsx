@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Button, Input, Form } from "antd";
 import * as yup from "yup";
 import "antd/dist/antd.css";
 import { Formik } from "formik";
 import { connect } from "react-redux";
 
-const { TextArea } = Input;
 const EditTodo = props => {
   const validationSchema = yup.object().shape({
     note: yup.string().required("note is required")
@@ -14,15 +12,14 @@ const EditTodo = props => {
   const { id } = props.match.params;
 
   const [noteText] = useState(props.notes[id]);
-  const editUpdate = async item => {
-    const notes = [...props.notes];
 
-    notes[id] = item;
-
-    await axios.post(process.env.REACT_APP_API_URL, { noteItems: notes });
-    props.history.push("/");
+  const editUpdate = item => {
+    const noteItems = [...props.notes];
+    noteItems[id] = item;
+    const path = props.history;
+    props.edit(noteItems, path);
   };
-
+  const { TextArea } = Input;
   return (
     <Formik
       initialValues={{ note: noteText }}
@@ -63,10 +60,13 @@ const EditTodo = props => {
   );
 };
 const mapDispatchToProps = dispatch => ({
-  dlte: note => dispatch({ type: "DELETE", value: note })
+  edit: (noteItems, path) =>
+    dispatch({ type: "EDIT_NOTES", location: { data: noteItems, value: path } })
 });
 const mapStateToProps = state => ({
-  notes: state.notes
+  notes: state.data,
+  loading: state.loading,
+  error: state.error
 });
 export default connect(
   mapStateToProps,

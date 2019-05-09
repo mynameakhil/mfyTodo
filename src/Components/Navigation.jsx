@@ -11,7 +11,7 @@ const Navigation = () => {
   };
 
   return (
-    <Menu onClick={handleClick} selectedKeys={current} mode="horizontal">
+    <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
       <Menu.Item key="home">
         <Icon type="home" />
         HOME

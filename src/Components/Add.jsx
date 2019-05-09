@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { Button, Input, Form } from "antd";
@@ -11,15 +10,12 @@ const AddTodo = props => {
     note: yup.string().required("note is required")
   });
 
-  const addNotes = async item => {
-    props.add(item);
-    const noteItems = props.notes;
+  const addNotes = item => {
+    const path = props.history;
+    const noteItems = [...(props.notes || []), item];
+    props.add(noteItems, path);
 
-    noteItems.push(item);
-
-    await axios.post(process.env.REACT_APP_API_URL, { noteItems });
-
-    props.history.push("/");
+    // if(props.state){props.history.push("/");}
   };
 
   return (
@@ -45,7 +41,6 @@ const AddTodo = props => {
               name="note"
               type="text"
               placeholder="enter the note"
-              autosize
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.note}
@@ -62,10 +57,11 @@ const AddTodo = props => {
   );
 };
 const mapDispatchToProps = dispatch => ({
-  add: item => dispatch({ type: "ADD", value: item })
+  add: (noteItems, path) =>
+    dispatch({ type: "ADD_NOTES", location: { data: noteItems, value: path } })
 });
 const mapStateToProps = state => ({
-  notes: state.notes
+  notes: state.data
 });
 export default connect(
   mapStateToProps,
