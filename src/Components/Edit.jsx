@@ -10,6 +10,7 @@ const EditTodo = props => {
     note: yup.string().required("note is required")
   });
   const { id } = props.match.params;
+  // const [loading, setLoad] = useState(false);
 
   const [noteText] = useState(props.notes[id]);
 
@@ -19,6 +20,10 @@ const EditTodo = props => {
     const path = props.history;
     props.edit(noteItems, path);
   };
+  // const enterLoading = () => {
+  //   console.log("hhh");
+  //   setLoad({ loading: true });
+  // };
   const { TextArea } = Input;
   return (
     <Formik
@@ -53,6 +58,9 @@ const EditTodo = props => {
           <Button type="primary" onClick={handleSubmit}>
             Update
           </Button>
+          {/* <Button type="primary" onClick={enterLoading} onClick={handleSubmit}>
+            Click me!
+          </Button> */}
         </form>
       )}
       validationSchema={validationSchema}

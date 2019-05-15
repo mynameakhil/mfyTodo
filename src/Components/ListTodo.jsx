@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { Button, Table } from "antd";
+import { Button, Table, Alert } from "antd";
 import { connect } from "react-redux";
 import "antd/dist/antd.css";
 import "./Notes.css";
@@ -15,17 +15,26 @@ function ListTodos(props) {
     props.delete(noteItems);
   };
 
-  if (!props.notes) {
-    return <pre>{JSON.stringify(props.notes)}</pre>;
-  }
   const newNotes = props.notes.map((item, index) => ({
     Number: index + 1,
     Note: item
   }));
 
   //  return <pre>{JSON.stringify(props.notes)}</pre>;
+  if (props.error) {
+    return (
+      <div>
+        <Alert
+          message="Error"
+          description="your connection not seccure."
+          type="error"
+          showIcon
+        />
+      </div>
+    );
+  }
   return (
-    <Table dataSource={newNotes} rowKey="Number">
+    <Table dataSource={newNotes} rowKey="Number" loading={props.loading}>
       <Table.Column
         title="Number"
         dataIndex="Number"

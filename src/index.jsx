@@ -12,6 +12,8 @@ import { watcherSaga, deleterSaga, editerSaga, addrSaga } from "./Sagas/Saga";
 
 const SagaMiddleware = createSagaMiddleware();
 
+// ReactDOM.render(<Spin />, mountNode);
+
 const store = createStore(reducer, applyMiddleware(SagaMiddleware));
 // const store = createStore(
 //   reducer,
@@ -21,6 +23,7 @@ SagaMiddleware.run(deleterSaga);
 SagaMiddleware.run(editerSaga);
 SagaMiddleware.run(addrSaga);
 SagaMiddleware.run(watcherSaga);
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

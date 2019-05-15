@@ -61,13 +61,13 @@ function* editSaga(action) {
       type: "EDIT_NOTES_SUCCESS",
       data: notes
     });
-    action.location.value.push("/");
   } catch (error) {
     yield put({
       type: "EDIT_NOTES_ERROR",
       error: error.message
     });
   }
+  action.location.value.push("/");
 }
 
 function* addSaga(action) {
@@ -80,13 +80,13 @@ function* addSaga(action) {
       type: "ADD_NOTES_SUCCESS",
       data: notes
     });
-    action.location.value.push("/");
   } catch (error) {
     yield put({
       type: "ADD_NOTES_ERROR",
       error: error.message
     });
   }
+  action.location.value.push("/");
 }
 
 export function* watcherSaga() {

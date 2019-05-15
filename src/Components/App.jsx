@@ -6,6 +6,12 @@ import Notfound from "./NotFound";
 import Navigation from "./Navigation";
 import EditTodo from "./Edit";
 import AddTodo from "./Add";
+// import Icon from "antd/lib/icon";
+// import Spin from "antd/lib/spin";
+
+// Spin.setDefaultIndicator(
+//   <Icon size="large" style={{ fontSize: "36px" }} type="loading" />
+// );
 
 const App = () => {
   const textAlign = {
