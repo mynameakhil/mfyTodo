@@ -15,7 +15,7 @@ function ListTodos(props) {
     props.delete(noteItems);
   };
 
-  const newNotes = props.notes.length ? props.notes.map((item, index) => ({
+  const newNotes = (props.notes && props.notes.length) ? props.notes.map((item, index) => ({
     Number: index + 1,
     Note: item
   }))
