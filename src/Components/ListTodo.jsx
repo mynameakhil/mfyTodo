@@ -15,10 +15,11 @@ function ListTodos(props) {
     props.delete(noteItems);
   };
 
-  const newNotes = props.notes.map((item, index) => ({
+  const newNotes = props.notes.length ? props.notes.map((item, index) => ({
     Number: index + 1,
     Note: item
-  }));
+  }))
+  : []
 
   //  return <pre>{JSON.stringify(props.notes)}</pre>;
   if (props.error) {
